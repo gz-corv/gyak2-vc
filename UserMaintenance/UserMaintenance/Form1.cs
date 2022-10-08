@@ -23,6 +23,10 @@ namespace UserMaintenance
             label1.Text = AppResources.FullName;
             button1.Text = AppResources.Add;
             button2.Text = AppResources.Save;
+            button3.Text = AppResources.Delete;
+
+            button2.Enabled = false;
+            button3.Enabled = false;
 
             listBox1.DataSource = users;
             listBox1.ValueMember = "ID";
@@ -40,6 +44,9 @@ namespace UserMaintenance
             users.Add(user);
 
             textBox1.Clear();
+
+            button2.Enabled = true;
+            button3.Enabled = true;
              
         }
 
@@ -76,6 +83,19 @@ namespace UserMaintenance
 
 
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (users.Count > 0)
+                users.RemoveAt(users.Count - 1);
+            else
+            {
+                button2.Enabled = false;
+                button3.Enabled = false;
+            }
+                
+                
         }
     }
 }
