@@ -23,6 +23,8 @@ namespace Gyak03_Linq
 
             LoadData("ramen.csv");
             Console.WriteLine("end of load");
+
+            countryList.DisplayMember = "Name";
         }
 
         private void LoadData(String fileName) 
@@ -111,5 +113,20 @@ namespace Gyak03_Linq
                  
          }
 
+        private void countryFilter_TextChanged(object sender, EventArgs e)
+        {
+            GetCountries();
+        }
+
+        private void GetCountries()
+        {
+
+            var countriesList = (from c in countries
+                               where c.Name.ToLower().Contains(countryFilter.Text.ToString().ToLower())
+                               orderby c.Name
+                               select c
+                             );
+            countryList.DataSource = countriesList.ToList();
+        }
     }
 }
