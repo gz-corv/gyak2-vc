@@ -15,11 +15,13 @@ namespace Gyak03_Linq
     {
 
         private List<Country> countries;
+        private List<Ramen> ramens;
         public Form1()
         {
             InitializeComponent();
 
             LoadData("ramen.csv");
+            Console.WriteLine("end of load");
         }
 
         private void LoadData(String fileName) 
@@ -28,6 +30,11 @@ namespace Gyak03_Linq
                 countries = new List<Country>();
             countries.Clear();
 
+            if (ramens == null)
+                ramens = new List<Ramen>();
+            ramens.Clear();
+
+
             using (StreamReader sr = new StreamReader(fileName, Encoding.Default))
             {
 
@@ -35,25 +42,45 @@ namespace Gyak03_Linq
                 while (!sr.EndOfStream)
                 {
                     string[] line = sr.ReadLine().Split(';');
-                    Country item = new Country();
+                    
 
                     String currentName = line[2];
-                    var currentCountry = (from c in countries
-                                          where c.Name.Equals(currentName)
-                                          select c).FirstOrDefault();
 
-                    if (currentCountry == null)
+                    var country = AddCountry(currentName);
+
+                    var ramen = new Ramen()
                     {
-                        currentCountry = new Country();
-                        currentCountry.ID = countries.Count() + 1;
-                        currentCountry.Name = currentName;
-                        countries.Add(currentCountry);
-                    }
+                        ID = ramens.Count + 1,
+                        Brand = line[0],
+                        Name = line[1],
+                        CountryFK = country.ID,
+                        Country = country,
+                        Rating = Convert.ToDouble(line[3])
+                    };
                     
+                    ramens.Add(ramen);
                     
                 }
 
             }
+        }
+
+        private Country AddCountry(String countryName)
+        {
+            var currentCountry = (from c in countries
+                                  where c.Name.Equals(countryName)
+                                  select c).FirstOrDefault();
+
+            if (currentCountry == null)
+            {
+                currentCountry = new Country();
+                currentCountry.ID = countries.Count() + 1;
+                currentCountry.Name = countryName;
+                countries.Add(currentCountry);
+            }
+
+            return currentCountry;
+
         }
 
     }
