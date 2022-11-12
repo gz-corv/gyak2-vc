@@ -16,6 +16,7 @@ namespace Gyak03_Linq
 
         private List<Country> countries;
         private List<Ramen> ramens;
+        private List<Brand> brands;
         public Form1()
         {
             InitializeComponent();
@@ -34,6 +35,10 @@ namespace Gyak03_Linq
                 ramens = new List<Ramen>();
             ramens.Clear();
 
+            if (brands == null)
+                brands = new List<Brand>();
+            brands.Clear();
+
 
             using (StreamReader sr = new StreamReader(fileName, Encoding.Default))
             {
@@ -44,15 +49,18 @@ namespace Gyak03_Linq
                     string[] line = sr.ReadLine().Split(';');
                     
 
-                    String currentName = line[2];
+                    String countryName = line[2];
+                    String brandName = line[0];
 
-                    var country = AddCountry(currentName);
+                    var country = AddCountry(countryName);
+                    var brand = AddBrand(brandName);
 
                     var ramen = new Ramen()
                     {
                         ID = ramens.Count + 1,
-                        Brand = line[0],
                         Name = line[1],
+                        BrandFk = brand.ID,
+                        Brand = brand,
                         CountryFK = country.ID,
                         Country = country,
                         Rating = Convert.ToDouble(line[3])
@@ -74,7 +82,7 @@ namespace Gyak03_Linq
             if (currentCountry == null)
             {
                 currentCountry = new Country();
-                currentCountry.ID = countries.Count() + 1;
+                currentCountry.ID = countries.Count + 1;
                 currentCountry.Name = countryName;
                 countries.Add(currentCountry);
             }
@@ -82,6 +90,26 @@ namespace Gyak03_Linq
             return currentCountry;
 
         }
+
+
+        private Brand AddBrand(String brandName)
+        {
+            var currentBrand = (from b in brands
+                                where b.Name.Equals(brandName)
+                                select b).FirstOrDefault();
+
+            if (currentBrand == null)
+            {
+                currentBrand = new Brand();
+                currentBrand.ID = brands.Count + 1;
+                currentBrand.Name = brandName;
+                brands.Add(currentBrand);
+            }
+
+            return currentBrand;
+                
+                 
+         }
 
     }
 }

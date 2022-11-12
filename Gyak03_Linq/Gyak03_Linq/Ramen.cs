@@ -7,9 +7,12 @@ namespace Gyak03_Linq
     class Ramen
     {
         public int ID { get; set; }
-        public String Brand { get; set; }
-
+       
         public String Name { get; set; }
+
+        public int BrandFk { get; set; }
+
+        public Brand Brand { get; set; }
 
         public int CountryFK { get; set; }
 
