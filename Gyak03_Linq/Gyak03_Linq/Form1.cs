@@ -128,5 +128,37 @@ namespace Gyak03_Linq
                              );
             countryList.DataSource = countriesList.ToList();
         }
+
+        private void countryList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var country = (Country)((ListBox)sender).SelectedItem;
+            if (country == null)
+            {
+                MessageBox.Show("Selected country not found!");
+                return;
+            }
+
+            var ramensList = (from r in ramens
+                              where r.CountryFK == country.ID
+                              select r
+                              );
+            var groupedRamens = (from gr in ramensList
+                                 group gr.Rating by gr.Brand.Name into gr
+                                 select new
+                                 {
+                                     BrandName = gr.Key,
+                                     AverageRating = Math.Round(gr.Average(), 2)
+                                 }
+                                 );
+
+            var orderedGroupOfRamens = from og in groupedRamens
+                                       orderby og.AverageRating descending
+                                       select og;
+
+            resultGrid.DataSource = orderedGroupOfRamens.ToList();
+                                      
+
+
+        }
     }
 }
