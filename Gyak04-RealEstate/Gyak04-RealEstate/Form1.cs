@@ -128,7 +128,7 @@ namespace Gyak04_RealEstate
 
             Excel.Range firstColumnRange = xlSheet.get_Range(GetCell(2, 1), GetCell( counter+1, 1));
             firstColumnRange.Font.Bold = true;
-            headerRange.Interior.Color = Color.LightYellow;
+            firstColumnRange.Interior.Color = Color.LightYellow;
 
             Excel.Range lastColumnRange = xlSheet.get_Range(GetCell(2, headers.Length), GetCell(counter+1, headers.Length));
             lastColumnRange.Interior.Color = Color.LightGreen;
