@@ -12,9 +12,20 @@ namespace Gyak04_RealEstate
 {
     public partial class Form1 : Form
     {
+        private RealEstateEntities context = new RealEstateEntities();
+
+        private List<Flat> flats;
+
         public Form1()
         {
             InitializeComponent();
+            LoadData();
+        }
+
+
+        private void LoadData()
+        {
+            flats = context.Flat.ToList();
         }
     }
 }
