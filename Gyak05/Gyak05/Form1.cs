@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace Gyak05
 {
@@ -23,9 +24,11 @@ namespace Gyak05
             InitializeComponent();
 
             dataGridView1.DataSource = rates;
+
+            ReadXml();
         }
 
-        private void FetchExchangeResults()
+        private string FetchExchangeResults()
         {
             var mnbService = new MNBArfolyamServiceSoapClient();
             var request = new GetExchangeRatesRequestBody()
@@ -37,8 +40,33 @@ namespace Gyak05
 
             var response = mnbService.GetExchangeRates(request);
 
-            var result = response.GetExchangeRatesResult;
+            return response.GetExchangeRatesResult;
         }
 
+
+        private void ReadXml() 
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(FetchExchangeResults());
+            foreach (XmlElement element in xml.DocumentElement)
+            {
+                RateData rateData = new RateData();
+                rates.Add(rateData);
+                rateData.Currency = element.ChildNodes[0].Attributes["curr"].Value;
+                rateData.Date = Convert.ToDateTime(element.Attributes["date"].Value);
+                decimal unit = Convert.ToDecimal(element.ChildNodes[0].Attributes["unit"].Value);
+                decimal value = Convert.ToDecimal(element.ChildNodes[0].InnerText);
+                if (unit != 0)
+                {
+                    rateData.Value = value / unit;
+                }
+                else
+                {
+                    rateData.Value = value;
+                }
+            }
+
+
+        }
     }
 }

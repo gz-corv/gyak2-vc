@@ -10,6 +10,6 @@ namespace Gyak05.Entities
     {
         public DateTime Date { get; set; }
         public string Currency { get; set; }
-        public string Value { get; set; }
+        public decimal Value { get; set; }
     }
 }
