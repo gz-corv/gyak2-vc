@@ -18,13 +18,14 @@ namespace Gyak05
     {
 
         private BindingList<RateData> rates = new BindingList<RateData>();
-       
         
+
         public Form1()
         {
             InitializeComponent();
 
             dataGridView1.DataSource = rates;
+            
 
             DisplayData();
         }
@@ -34,9 +35,9 @@ namespace Gyak05
             var mnbService = new MNBArfolyamServiceSoapClient();
             var request = new GetExchangeRatesRequestBody()
             {
-                currencyNames = "EUR",
-                startDate = "2020-01-01",
-                endDate = "2020-06-30"
+                currencyNames = currencyCb.SelectedItem.ToString(),
+                startDate = startDateTimePicker.Value.ToString(),
+                endDate = endDateTimePicker.Value.ToString()
             };
 
             var response = mnbService.GetExchangeRates(request);
@@ -87,6 +88,21 @@ namespace Gyak05
             chartRateData.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
             chartRateData.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
             chartRateData.ChartAreas[0].AxisY.IsStartedFromZero = false;
+        }
+
+        private void currencyCb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DisplayData();
+        }
+
+        private void startDateTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+            DisplayData();
+        }
+
+        private void endDateTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+            DisplayData();
         }
     }
 }
