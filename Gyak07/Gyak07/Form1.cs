@@ -100,7 +100,7 @@ namespace Gyak07
                 int row = 1;
                 foreach (var item in orderedProfits)
                 {
-                    sw.WriteLine(row.ToString() + ";" + item.ToString());
+                    sw.WriteLine(String.Format("{0};{1}", row, item));
                     row++;
                    
                 }
